@@ -1,6 +1,7 @@
 # flutter_web_kitshop
 
-A new Flutter project.
+Flutter web project.
+<img width="1440" alt="Screenshot 2021-03-23 at 19 33 35" src="https://user-images.githubusercontent.com/81313761/112394430-62fc8000-8d05-11eb-8bb4-9758878750e6.png">
 
 ## Getting Started
 
