@@ -48,12 +48,15 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  NavBar(),
                   SizedBox(
                     height: _sizeBetween,
                   ),
                   _size.width >= 1200.0
-                      ? Container(height: _size.height * 0.8, child: Body())
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 80.0),
+                          child: Container(
+                              height: _size.height * 0.8, child: Body()),
+                        )
                       : Body(),
                 ],
               ),

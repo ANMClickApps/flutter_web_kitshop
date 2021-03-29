@@ -3,8 +3,10 @@ const String textFieldPassword = 'Password';
 const String textFieldName = 'Your name';
 const String textFieldAddress = 'Your address';
 const String textFieldPhone = 'Phone number';
-const String textLoginButton = 'sign in';
+const String textLoginButton = 'login';
 const String textSignUpButton = 'sign up';
+const String textDontSignUp = 'Already a member?';
+const String textDontLogin = 'Not a member?';
 
 //snackBar error
 const String textEmailError = 'Please enter the email correctly';

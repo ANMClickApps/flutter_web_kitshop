@@ -19,6 +19,8 @@ class _BodyState extends State<Body> {
   var phoneController = TextEditingController();
   var passwordController = TextEditingController();
 
+  bool isLogin = false;
+
   @override
   void initState() {
     super.initState();
@@ -50,27 +52,35 @@ class _BodyState extends State<Body> {
   Widget formSignIn() {
     return Column(
       children: [
-        CustomTextField(
-            nameController: fullNameController,
-            label: textFieldName,
-            icon: Icons.person),
+        isLogin
+            ? SizedBox(
+                height: 80.0,
+              )
+            : CustomTextField(
+                nameController: fullNameController,
+                label: textFieldName,
+                icon: Icons.person),
         SizedBox(height: 18.0),
-        CustomTextField(
-            nameController: addressController,
-            label: textFieldAddress,
-            icon: Icons.home),
+        isLogin
+            ? SizedBox()
+            : CustomTextField(
+                nameController: addressController,
+                label: textFieldAddress,
+                icon: Icons.home),
         SizedBox(height: 18.0),
         CustomTextField(
             nameController: emailController,
             label: textFieldEmail,
             icon: Icons.email),
-        SizedBox(height: 18.0),
-        CustomTextField(
-            keyboardType: TextInputType.phone,
-            nameController: phoneController,
-            label: textFieldName,
-            icon: Icons.phone),
-        SizedBox(height: 18.0),
+        SizedBox(height: isLogin ? 10.0 : 18.0),
+        isLogin
+            ? SizedBox()
+            : CustomTextField(
+                keyboardType: TextInputType.phone,
+                nameController: phoneController,
+                label: textFieldName,
+                icon: Icons.phone),
+        SizedBox(height: isLogin ? 10.0 : 18.0),
         Container(
           width: double.infinity,
           decoration: BoxDecoration(boxShadow: [
@@ -110,7 +120,7 @@ class _BodyState extends State<Body> {
         ),
         SizedBox(height: 28.0),
         CustomButton(
-          text: textSignUpButton,
+          text: isLogin ? textLoginButton : textSignUpButton,
           onPressed: () async {
             if (fullNameController.text.length < 3) {
               print('check fullName $textNameError');
@@ -135,16 +145,39 @@ class _BodyState extends State<Body> {
             }
           },
         ),
+        SizedBox(height: 12.0),
+        TextButton(
+            onPressed: () {
+              setState(() {
+                isLogin = !isLogin;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(isLogin ? textDontLogin : textDontSignUp),
+                SizedBox(width: 3.0),
+                Text(
+                  isLogin ? 'Create account' : 'Login Here',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: BrandColors.colorPrimary.withOpacity(0.7)),
+                )
+              ],
+            ))
       ],
     );
   }
 
   List<Widget> desktopBody() {
     return <Widget>[
-      LeftSideBody(),
+      LeftSideBody(
+        isLogin: isLogin,
+      ),
       Expanded(
           child: Column(
         children: [
+          isLogin ? LoginTopTitle() : SizedBox(),
           formSignIn(),
           Spacer(),
           Container(
@@ -176,13 +209,13 @@ class _BodyState extends State<Body> {
             ),
             SizedBox(height: 18.0),
             Text(
-              'welcome back',
+              isLogin ? 'Please Login to your account.' : 'welcome back',
               style: TextStyle(
                   fontWeight: FontWeight.w700, color: BrandColors.colorText),
             ),
             SizedBox(height: 8.0),
             Text(
-              'Create your\npersonal\ncabinet',
+              isLogin ? 'Welcome Back' : 'Create your\npersonal\ncabinet',
               style: TextStyle(
                   letterSpacing: 1.5,
                   fontSize: 36.0,
@@ -212,6 +245,31 @@ class _BodyState extends State<Body> {
         ),
       ),
     ];
+  }
+}
+
+class LoginTopTitle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Please Login to your account.',
+          style: TextStyle(
+              fontWeight: FontWeight.w700, color: BrandColors.colorText),
+        ),
+        SizedBox(height: 8.0),
+        Text(
+          'Welcome Back',
+          style: TextStyle(
+              letterSpacing: 1.5,
+              fontSize: 48.0,
+              color: Colors.black,
+              fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
   }
 }
 
@@ -245,6 +303,8 @@ class SocialLink extends StatelessWidget {
 }
 
 class LeftSideBody extends StatelessWidget {
+  final bool isLogin;
+  LeftSideBody({this.isLogin});
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -253,26 +313,50 @@ class LeftSideBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'welcome back',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: BrandColors.colorText),
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  'Create your\npersonal\ncabinet',
-                  style: TextStyle(
-                      letterSpacing: 1.5,
-                      fontSize: 59.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
+            isLogin
+                ? Center(
+                    child: Container(
+                      height: 400.0,
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/images/logo_k.png',
+                            color: BrandColors.colorText,
+                          ),
+                          Positioned(
+                              bottom: 20.0,
+                              left: 20.0,
+                              child: Text(
+                                'kitshop'.toUpperCase(),
+                                style: TextStyle(
+                                    fontSize: 55.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: BrandColors.colorText),
+                              ))
+                        ],
+                      ),
+                    ),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'welcome back',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: BrandColors.colorText),
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        'Create your\npersonal\ncabinet',
+                        style: TextStyle(
+                            letterSpacing: 1.5,
+                            fontSize: 59.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
             Text(
               'Social network',
               style: TextStyle(
