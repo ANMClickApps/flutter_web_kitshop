@@ -14,3 +14,6 @@ const String textPasswordError = 'Password must be at least 8 characters';
 const String textNameError = 'Please enter the name correctly';
 const String textAddressError = 'Please enter the address correctly';
 const String textPhoneError = 'Please enter the phone number correctly';
+
+const String server = '<YOUR SERVER HERE>';
+const String serverApiKey = '<YOUR SERVERAPIKEY HERE>';

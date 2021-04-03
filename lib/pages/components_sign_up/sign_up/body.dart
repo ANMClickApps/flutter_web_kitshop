@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_web_kitshop/color_style.dart';
 import 'package:flutter_web_kitshop/constant_text.dart';
+import 'package:flutter_web_kitshop/helper/request_helper.dart';
+import 'package:flutter_web_kitshop/model/appdata_model.dart';
+import 'package:flutter_web_kitshop/pages/dasboard_page.dart';
 import 'package:flutter_web_kitshop/widgets/custom_button.dart';
 import 'package:flutter_web_kitshop/widgets/custom_textfield.dart';
+import 'package:provider/provider.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -49,7 +53,7 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget formSignIn() {
+  Widget formSignUp() {
     return Column(
       children: [
         isLogin
@@ -121,28 +125,8 @@ class _BodyState extends State<Body> {
         SizedBox(height: 28.0),
         CustomButton(
           text: isLogin ? textLoginButton : textSignUpButton,
-          onPressed: () async {
-            if (fullNameController.text.length < 3) {
-              print('check fullName $textNameError');
-              return;
-            }
-            if (addressController.text.length < 3) {
-              print('check address $textAddressError');
-              return;
-            }
-            if (!emailController.text.contains('@')) {
-              print('check email $textEmailError');
-              return;
-            }
-            if (phoneController.text.length < 8) {
-              print('check phone $textPhoneError');
-              return;
-            }
-
-            if (passwordController.text.length < 8) {
-              print('check password $textPasswordError');
-              return;
-            }
+          onPressed: () {
+            isLogin ? _validationLogin() : _validationSignUp();
           },
         ),
         SizedBox(height: 12.0),
@@ -169,6 +153,68 @@ class _BodyState extends State<Body> {
     );
   }
 
+  _validationSignUp() {
+    if (fullNameController.text.length < 3) {
+      print('check fullName $textNameError');
+      return;
+    }
+    if (addressController.text.length < 3) {
+      print('check address $textAddressError');
+      return;
+    }
+    if (!emailController.text.contains('@')) {
+      print('check email $textEmailError');
+      return;
+    }
+    if (phoneController.text.length < 8) {
+      print('check phone $textPhoneError');
+      return;
+    }
+
+    if (passwordController.text.length < 8) {
+      print('check password $textPasswordError');
+      return;
+    }
+    registration();
+    fullNameController.clear();
+    addressController.clear();
+    emailController.clear();
+    passwordController.clear();
+    phoneController.clear();
+  }
+
+  registration() async {
+    print('registration start');
+    var _idRes = await RequstHelper.signUpRequest(
+      name: fullNameController.text,
+      address: addressController.text,
+      email: emailController.text,
+      phone: phoneController.text,
+      password: passwordController.text,
+    );
+    if (_idRes.toString() != 'failed') {
+      Provider.of<AppDataModel>(context, listen: false)
+          .updateSignUpId(_idRes.toString());
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => DashBoardPage()));
+    } else {
+      print('Sign up FAILED');
+    }
+  }
+
+  _validationLogin() {
+    if (!emailController.text.contains('@')) {
+      print('check email $textEmailError');
+      return;
+    }
+
+    if (passwordController.text.length < 8) {
+      print('check password $textPasswordError');
+      return;
+    }
+  }
+
   List<Widget> desktopBody() {
     return <Widget>[
       LeftSideBody(
@@ -178,7 +224,7 @@ class _BodyState extends State<Body> {
           child: Column(
         children: [
           isLogin ? LoginTopTitle() : SizedBox(),
-          formSignIn(),
+          formSignUp(),
           Spacer(),
           Container(
             height: 1.2,
@@ -225,7 +271,7 @@ class _BodyState extends State<Body> {
             SizedBox(
               height: 30.0,
             ),
-            formSignIn(),
+            formSignUp(),
             SizedBox(height: 32.0),
             Text(
               'Social network',

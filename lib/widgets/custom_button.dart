@@ -18,7 +18,7 @@ class CustomButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
       ),
-      onPressed: () {},
+      onPressed: onPressed,
       child: Container(
         height: 50.0,
         child: Center(

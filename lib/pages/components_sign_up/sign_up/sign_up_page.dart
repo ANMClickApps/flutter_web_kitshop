@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_kitshop/color_style.dart';
-import 'package:flutter_web_kitshop/pages/components_sign_up/navbar.dart';
 import 'package:flutter_web_kitshop/pages/components_sign_up/sign_up/body.dart';
 
 class SignUpPage extends StatefulWidget {
